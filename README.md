@@ -1,58 +1,281 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎓 ErasmusHub
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **Design Web Avançado de Serviços Web** &bull; Projeto Semestral  
+> **Tema do Seminário:** *The evolution of web development* (A evolução do desenvolvimento web)  
+> **Plataforma:** PHP 8.5 / Laravel 11/12 &bull; MySQL &bull; Tailwind CSS &bull; REST API &bull; Open-Meteo API  
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📌 1. Visão Geral do Projeto
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+O **ErasmusHub** é uma aplicação web completa desenvolvida para apoiar estudantes em mobilidade Erasmus+. A plataforma oferece guias práticos, dicas de sobrevivência académica e urbana, alojamento, transportes, custo de vida e eventos em diversas cidades europeias (ex.: Lisboa, Porto, Coimbra, Zagreb, Split, Madrid, etc.).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+A aplicação cumpre integralmente todos os requisitos solicitados na disciplina:
+- **Frontend público:** Responsivo, pesquisa dinâmica, filtragem por categorias e cidades, paginação e meteorologia em tempo real.
+- **Multilíngue (i18n):** Suporte completo para 3 línguas: **Inglês (EN)**, **Português (PT)** e **Croata (HR)**.
+- **Backend robusto:** Desenvolvido em PHP com a arquitetura MVC do Laravel.
+- **CMS / Administração de Conteúdos:** Ciclo de vida de guias (rascunhos vs. publicados), editor de texto avançado (Rich Text), upload/remoção de imagens e gestão de categorias.
+- **Controlo de Acesso Baseado em Papéis (RBAC):** Visitante, Utilizador Registado, Editor e Administrador, com invalidação imediata de sessão para contas desativadas.
+- **Base de Dados Relacional:** MySQL com integridade referencial, restrições `restrictOnDelete` e `cascadeOnDelete`, e transações de banco de dados (`DB::transaction`).
+- **API RESTful Própria:** Endpoints documentados com códigos HTTP semânticos (200, 201, 204, 400, 401, 403, 404, 500), validação por **JSON Schema (Draft 2020-12)** e consumo ativo no frontend via JavaScript `fetch()`.
+- **Serviço Web Externo:** Integração com a API **Open-Meteo** para obtenção de dados meteorológicos em tempo real com timeout de 3s, cache de 30 minutos e tolerância a falhas.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 👥 2. Perfis de Utilizador e Permissões (RBAC)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Papel | Descrição | Permissões |
+|---|---|---|
+| **Visitante** | Utilizador não autenticado | Consulta páginas públicas, lê guias publicados, pesquisa, filtra e consulta a meteorologia. |
+| **Utilizador Registado** | Estudante com conta ativa | Acede a conteúdos publicados e gere o seu perfil pessoal (nome, email, palavra-passe). Não pode publicar guias nem aceder ao CMS. |
+| **Editor** | Autor de conteúdos | Cria novos guias (rascunho ou publicado), edita e elimina **exclusivamente os seus próprios guias**, faz upload de imagens. Não pode alterar categorias nem gerir utilizadores. |
+| **Administrador** | Gestor total da plataforma | Gere todos os guias (de qualquer autor), cria/edita/elimina categorias, gere utilizadores, altera perfis/roles e ativa/desativa contas. |
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+> 🔒 **Segurança ativa:** Ao desativar uma conta (`is_active = false`), o middleware `EnsureUserIsActive` deteta o estado e termina imediatamente a sessão em curso do utilizador, redirecionando-o para o ecrã de login.
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🔑 3. Contas de Teste Pré-Configuradas
 
-```bash
-composer require laravel/boost --dev
+Todas as contas foram criadas via `DatabaseSeeder` com a palavra-passe padrão: `password`.
 
-php artisan boost:install
+| Nome | E-mail | Função (Role) | Estado | Propósito de Teste |
+|---|---|---|---|---|
+| **Admin ErasmusHub** | `admin@example.com` | `admin` | Ativo | Gestão global, categorias, utilizadores e guias |
+| **Editor Um** | `editor1@example.com` | `editor` | Ativo | Testar criação e edição dos seus próprios guias |
+| **Editor Dois** | `editor2@example.com` | `editor` | Ativo | Testar restrição de acesso aos guias de outros editores |
+| **Utilizador Registado**| `user@example.com` | `registered` | Ativo | Testar perfil básico e ausência de poderes no CMS |
+| **Conta Desativada** | `inactive@example.com` | `registered` | **Inativo** | Demonstrar bloqueio e encerramento de sessão imediato |
+
+---
+
+## 🗄️ 4. Modelo de Dados e Diagrama ER
+
+```mermaid
+erDiagram
+    ROLES ||--o{ USERS : "atribui_a"
+    USERS ||--o{ GUIDES : "autor_de"
+    CATEGORIES ||--o{ GUIDES : "classifica"
+    GUIDES ||--o| IMAGES : "possui"
+
+    ROLES {
+        bigint id PK
+        string name UK "registered | editor | admin"
+    }
+
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        string password "hashed (bcrypt)"
+        bigint role_id FK "restrictOnDelete"
+        boolean is_active "default true"
+        timestamp email_verified_at
+        timestamps created_at_updated_at
+    }
+
+    CATEGORIES {
+        bigint id PK
+        string name UK
+        string slug UK
+        text description
+        timestamps created_at_updated_at
+    }
+
+    GUIDES {
+        bigint id PK
+        string title
+        string slug UK
+        string summary "max 500"
+        longtext content "sanitized HTML"
+        bigint category_id FK "restrictOnDelete"
+        bigint author_id FK "restrictOnDelete"
+        string city "Lisboa, Zagreb, Porto..."
+        enum status "draft | published"
+        timestamp published_at
+        timestamps created_at_updated_at
+    }
+
+    IMAGES {
+        bigint id PK
+        bigint guide_id FK "UK, cascadeOnDelete"
+        string path
+        string mime_type "image/jpeg, png, webp"
+        unsigned_int size "bytes"
+        string alt_text
+        timestamps created_at_updated_at
+    }
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Regras de Integridade:
+1. **Proteção de Categorias:** Se uma categoria possuir guias associados, o sistema **bloqueia expressamente a sua eliminação** com uma mensagem amigável ao utilizador.
+2. **Exclusão de Imagens:** Ao eliminar um guia, o ficheiro físico em disco é apagado e o registo correspondente na tabela `images` é removido via `cascadeOnDelete`.
+3. **Transações:** A criação e atualização de guias e respetivas imagens é encapsulada em `DB::transaction()`.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🌐 5. Sistema Multilíngue (i18n)
 
-## Code of Conduct
+A aplicação dispõe de um alternador visual de idiomas no cabeçalho e suporta 3 línguas:
+* 🇬🇧 **Inglês (`en`)**
+* 🇵🇹 **Português (`pt`)**
+* 🇭🇷 **Croata (`hr`)**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+O idioma escolhido é persistido na sessão através da rota `/locale/{locale}` e aplicado em cada requisição pelo middleware `SetLocale`.
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🔌 6. Documentação da API REST Própria (`/api/v1`)
 
-## License
+A API segue os princípios RESTful, devolve `Content-Type: application/json` e suporta paginação e filtros.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Endpoints Disponíveis:
+
+| Método | Caminho | Autenticação | Descrição | Códigos HTTP |
+|---|---|---|---|---|
+| `GET` | `/api/v1/guides` | Pública | Lista guias publicados com paginação e filtros (`search`, `category_id`, `city`, `per_page`). | `200` |
+| `GET` | `/api/v1/guides/{id}` | Pública | Detalhe de um guia publicado. Rascunhos retornam `404`. | `200`, `404` |
+| `POST` | `/api/v1/guides` | Editor / Admin | Criação de um novo guia com validação server-side. | `201`, `400`, `401`, `403` |
+| `PATCH` | `/api/v1/guides/{id}` | Autor / Admin | Atualização de um guia existente. | `200`, `400`, `401`, `403`, `404` |
+| `DELETE` | `/api/v1/guides/{id}` | Autor / Admin | Eliminação de um guia. Resposta vazia (`noContent`). | `204`, `401`, `403`, `404` |
+| `GET` | `/api/v1/categories` | Pública | Lista todas as categorias e contagem de guias publicados. | `200` |
+| `POST` | `/api/v1/validate-guide-schema` | Pública | Demonstração e verificação de payload contra o **JSON Schema**. | `200` (válido), `400` (inválido) |
+
+### Exemplo de Resposta `GET /api/v1/guides` (Status 200):
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 1,
+      "title": "Como encontrar quarto em Lisboa",
+      "slug": "como-encontrar-quarto-em-lisboa",
+      "summary": "Dicas para procurar alojamento sem cair em burlas.",
+      "category": { "id": 1, "name": "Alojamento", "slug": "alojamento" },
+      "author": { "id": 2, "name": "Editor Um" },
+      "city": "Lisboa",
+      "published_at": "2026-11-17T18:00:00.000000Z"
+    }
+  ],
+  "meta": { "current_page": 1, "last_page": 1, "per_page": 10, "total": 5 }
+}
+```
+
+### Validação por JSON Schema (Draft 2020-12):
+O esquema formal está localizado em `public/schemas/guide-schema.json`. Pode ser testado diretamente via POST para `/api/v1/validate-guide-schema`.
+* **Payload Válido (HTTP 200):**
+```json
+{
+  "title": "Guia de Sobrevivência em Zagreb",
+  "summary": "Tudo sobre transporte, custo de vida e segurança em Zagreb.",
+  "content": "<p>Zagreb é uma capital acolhedora e segura...</p>",
+  "category_id": 1,
+  "city": "Zagreb",
+  "status": "published"
+}
+```
+* **Payload Inválido (HTTP 400):**
+```json
+{
+  "title": "No",
+  "content": "Short"
+}
+```
+*Resposta:*
+```json
+{
+  "status": "invalid",
+  "valid": false,
+  "errors": [
+    "Missing required field: 'summary'",
+    "Missing required field: 'category_id'",
+    "Field 'title' is too short (min 3 characters)"
+  ]
+}
+```
+
+### Consumo no Frontend:
+Na página de Guias (`/guides`), é possível alternar entre a listagem tradicional e a **Pesquisa Dinâmica via REST API (⚡ Live API Search)**, que executa chamadas assíncronas em JavaScript (`fetch('/api/v1/guides')`) e renderiza dinamicamente os resultados no DOM.
+
+---
+
+## ⛅ 7. Integração com API Externa (Open-Meteo)
+
+O serviço `App\Services\WeatherService` conecta-se à API aberta **Open-Meteo** para obter o clima em tempo real nas cidades dos guias Erasmus:
+- **Resiliência a Falhas:** Timeout configurado para 3 segundos.
+- **Cache Inteligente:** Resultados são mantidos em cache por 30 minutos, evitando requisições repetidas à rede.
+- **Indicador de Frescura:** A interface apresenta ao utilizador se o dado é dinâmico ou recuperado da cache, exibindo o horário exato da última atualização bem-sucedida.
+- **Degradação Suave:** Caso a API externa esteja inacessível ou devolva uma estrutura incompleta, a aplicação não falha e apresenta um componente alternativo com mensagem informativa.
+
+---
+
+## 🔒 8. Requisitos de Segurança Implementados
+
+1. **Hash de Palavras-passe:** Armazenamento com `bcrypt` através de `Hash::make()` e verificação segura no login.
+2. **Proteção contra Injeção SQL:** Todas as interações com o banco usam o Eloquent ORM / PDO com binding de parâmetros.
+3. **Proteção contra Cross-Site Scripting (XSS):** Conteúdos provenientes de formulários passam por sanitização (`strip_tags`) permitindo apenas elementos seguros, e saídas Blade utilizam `{{ }}` por padrão.
+4. **Proteção contra CSRF:** Formulários contêm o token de validação `@csrf`.
+5. **Renovação de Sessão:** A sessão é regenerada após o login e terminada de forma segura no logout.
+6. **Desativação de Contas:** Contas com `is_active = false` têm a sessão imediatamente revogada no próximo pedido.
+7. **Validação de Uploads:** Imagens são validadas quanto ao tipo MIME (`jpeg`, `png`, `webp`) e tamanho máximo (2 MB).
+8. **Ocultação de Segredos:** Credenciais sensíveis e chaves de aplicação encontram-se isoladas no ficheiro `.env` (excluído do controlo de versões).
+
+---
+
+## 🚀 9. Instruções de Instalação e Execução
+
+### Pré-requisitos:
+- PHP >= 8.2 (com extensões `pdo_mysql`, `curl`, `mbstring`, `openssl`, `intl`)
+- Composer >= 2.x
+- MySQL ou MariaDB (disponível via Laragon)
+- Node.js & NPM
+
+### Passo a Passo:
+```bash
+# 1. Clonar o repositório e entrar na pasta
+cd c:\laragon\www\erasmushub
+
+# 2. Instalar dependências PHP
+composer install
+
+# 3. Configurar ambiente
+copy .env.example .env
+php artisan key:generate
+
+# 4. Criar a base de dados MySQL no Laragon com o nome: erasmushub
+
+# 5. Executar as migrações e seeders
+php artisan migrate --seed
+
+# 6. Criar o symlink de armazenamento para as imagens
+php artisan storage:link
+
+# 7. Compilar os assets de frontend (Tailwind / Vite)
+npm install
+npm run build
+
+# 8. Executar os testes automatizados
+php artisan test
+```
+
+A aplicação fica acessível no navegador em:
+`http://erasmushub.test` ou através de `php artisan serve` em `http://127.0.0.1:8000`.
+
+---
+
+## 🧪 10. Testes Automatizados
+
+O projeto inclui uma suite completa de testes automatizados com PHPUnit / Pest:
+```bash
+php artisan test
+```
+Resultados obtidos: **36 testes aprovados, 93 asserções, 0 falhas**.
+Cenários cobertos:
+- Acesso à homepage, about e guias públicos.
+- Alternância de idioma e persistência em sessão (`en`, `pt`, `hr`).
+- Bloqueio de visitantes a guias em rascunho (`draft`).
+- Desativação imediata de sessão para contas inativas.
+- Proibição de exclusão de categoria com guias associados.
+- Restrição de editor: não pode editar guias de outros editores.
+- Respostas JSON semânticas da API v1 (200, 404, 204).
+- Validação formal do payload contra o JSON Schema.

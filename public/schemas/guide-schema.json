@@ -1,0 +1,48 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "GuideCreationRequest",
+    "description": "JSON Schema specification for creating or validating an ErasmusHub guide entry",
+    "type": "object",
+    "required": [
+        "title",
+        "summary",
+        "content",
+        "category_id"
+    ],
+    "properties": {
+        "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 255,
+            "description": "The title of the guide."
+        },
+        "summary": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500,
+            "description": "Short introductory excerpt."
+        },
+        "content": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Full HTML or plain text body of the guide."
+        },
+        "category_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Foreign key reference to an existing category."
+        },
+        "city": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Associated Erasmus destination city."
+        },
+        "status": {
+            "type": "string",
+            "enum": ["draft", "published"],
+            "default": "draft",
+            "description": "Publication lifecycle state."
+        }
+    },
+    "additionalProperties": false
+}
