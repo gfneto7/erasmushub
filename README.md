@@ -56,6 +56,8 @@ erDiagram
     ROLES ||--o{ USERS : "atribui_a"
     USERS ||--o{ GUIDES : "autor_de"
     CATEGORIES ||--o{ GUIDES : "classifica"
+    COUNTRIES ||--o{ CITIES : "pertence_a"
+    CITIES ||--o{ GUIDES : "localiza"
     GUIDES ||--o| IMAGES : "possui"
 
     ROLES {
@@ -74,6 +76,28 @@ erDiagram
         timestamps created_at_updated_at
     }
 
+    COUNTRIES {
+        bigint id PK
+        string name UK
+        string code UK "PT, ES, HR, FR, DE, IT..."
+        string flag_emoji
+        string currency "EUR, CZK..."
+        timestamps created_at_updated_at
+    }
+
+    CITIES {
+        bigint id PK
+        bigint country_id FK "cascadeOnDelete"
+        string name
+        string slug UK
+        decimal latitude
+        decimal longitude
+        string main_university
+        text description
+        string cost_of_living "Low, Medium, High"
+        timestamps created_at_updated_at
+    }
+
     CATEGORIES {
         bigint id PK
         string name UK
@@ -89,6 +113,7 @@ erDiagram
         string summary "max 500"
         longtext content "sanitized HTML"
         bigint category_id FK "restrictOnDelete"
+        bigint city_id FK "nullOnDelete"
         bigint author_id FK "restrictOnDelete"
         string city "Lisboa, Zagreb, Porto..."
         enum status "draft | published"
@@ -133,6 +158,10 @@ A API segue os princípios RESTful, devolve `Content-Type: application/json` e s
 
 | Método | Caminho | Autenticação | Descrição | Códigos HTTP |
 |---|---|---|---|---|
+| `POST` | `/api/v1/login` | Pública | Autenticação e emissão de token Sanctum para testes (Postman/Bruno). | `200`, `403`, `422` |
+| `POST` | `/api/v1/logout` | Sanctum | Revogação do token ativo. | `200`, `401` |
+| `GET` | `/api/v1/destinations` | Pública | Lista de países da UE e respetivas cidades Erasmus. | `200` |
+| `GET` | `/api/v1/destinations/{slug}` | Pública | Detalhes da cidade com previsão meteorológica completa a 7 dias. | `200`, `404` |
 | `GET` | `/api/v1/guides` | Pública | Lista guias publicados com paginação e filtros (`search`, `category_id`, `city`, `per_page`). | `200` |
 | `GET` | `/api/v1/guides/{id}` | Pública | Detalhe de um guia publicado. Rascunhos retornam `404`. | `200`, `404` |
 | `POST` | `/api/v1/guides` | Editor / Admin | Criação de um novo guia com validação server-side. | `201`, `400`, `401`, `403` |
@@ -269,13 +298,17 @@ O projeto inclui uma suite completa de testes automatizados com PHPUnit / Pest:
 ```bash
 php artisan test
 ```
-Resultados obtidos: **36 testes aprovados, 93 asserções, 0 falhas**.
+Resultados obtidos: **46 testes aprovados, 164 asserções, 0 falhas**.
 Cenários cobertos:
-- Acesso à homepage, about e guias públicos.
+- Acesso à homepage, about, guias públicos e módulo de destinos europeus.
 - Alternância de idioma e persistência em sessão (`en`, `pt`, `hr`).
 - Bloqueio de visitantes a guias em rascunho (`draft`).
-- Desativação imediata de sessão para contas inativas.
+- Desativação imediata de sessão para contas inativas (`is_active = false`).
 - Proibição de exclusão de categoria com guias associados.
 - Restrição de editor: não pode editar guias de outros editores.
+- Emissão de tokens Sanctum (`POST /api/v1/login`) e revogação.
+- Validação de upload malicioso de imagens (MIME type).
+- Proibição de auto-despromoção de administradores.
 - Respostas JSON semânticas da API v1 (200, 404, 204).
 - Validação formal do payload contra o JSON Schema.
+- Consulta e previsão meteorológica a 7 dias com cache e tolerância a falhas.

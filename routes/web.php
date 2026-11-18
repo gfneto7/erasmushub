@@ -4,6 +4,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\GuideController as AdminGuideController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::get('/', HomeController::class)->name('home');
+Route::get('/destinations', [DestinationController::class, 'index'])->name('destinations.index');
 Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
 Route::get('/guides/{slug}', [GuideController::class, 'show'])->name('guides.show');
 Route::get('/about', AboutController::class)->name('about');

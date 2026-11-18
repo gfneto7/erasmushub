@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\City;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -10,11 +12,11 @@ use Illuminate\Support\Facades\Log;
 class WeatherService
 {
     /**
-     * Known Erasmus cities and their approximate coordinates.
+     * Fallback approximate coordinates for well-known Erasmus cities.
      */
     protected array $cityCoordinates = [
         'lisboa' => ['lat' => 38.7223, 'lon' => -9.1393, 'name' => 'Lisboa'],
-        'lisbon' => ['lat' => 38.7223, 'lon' => -9.1393, 'name' => 'Lisbon'],
+        'lisbon' => ['lat' => 38.7223, 'lon' => -9.1393, 'name' => 'Lisboa'],
         'porto' => ['lat' => 41.1579, 'lon' => -8.6291, 'name' => 'Porto'],
         'coimbra' => ['lat' => 40.2033, 'lon' => -8.4103, 'name' => 'Coimbra'],
         'braga' => ['lat' => 41.5454, 'lon' => -8.4265, 'name' => 'Braga'],
@@ -23,10 +25,17 @@ class WeatherService
         'dubrovnik' => ['lat' => 42.6507, 'lon' => 18.0944, 'name' => 'Dubrovnik'],
         'madrid' => ['lat' => 40.4168, 'lon' => -3.7038, 'name' => 'Madrid'],
         'barcelona' => ['lat' => 41.3851, 'lon' => 2.1734, 'name' => 'Barcelona'],
+        'valencia' => ['lat' => 39.4699, 'lon' => -0.3763, 'name' => 'Valência'],
         'paris' => ['lat' => 48.8566, 'lon' => 2.3522, 'name' => 'Paris'],
-        'rome' => ['lat' => 41.9028, 'lon' => 12.4964, 'name' => 'Rome'],
+        'lyon' => ['lat' => 45.7640, 'lon' => 4.8357, 'name' => 'Lyon'],
+        'rome' => ['lat' => 41.9028, 'lon' => 12.4964, 'name' => 'Roma'],
         'roma' => ['lat' => 41.9028, 'lon' => 12.4964, 'name' => 'Roma'],
-        'berlin' => ['lat' => 52.5200, 'lon' => 13.4050, 'name' => 'Berlin'],
+        'bologna' => ['lat' => 44.4949, 'lon' => 11.3426, 'name' => 'Bolonha'],
+        'bolonha' => ['lat' => 44.4949, 'lon' => 11.3426, 'name' => 'Bolonha'],
+        'berlin' => ['lat' => 52.5200, 'lon' => 13.4050, 'name' => 'Berlim'],
+        'munich' => ['lat' => 48.1351, 'lon' => 11.5820, 'name' => 'Munique'],
+        'prague' => ['lat' => 50.0755, 'lon' => 14.4378, 'name' => 'Praga'],
+        'praga' => ['lat' => 50.0755, 'lon' => 14.4378, 'name' => 'Praga'],
     ];
 
     /**
@@ -55,8 +64,37 @@ class WeatherService
     ];
 
     /**
-     * Get weather forecast for a given city name.
-     * Handles timeout (3s), caching (30m), missing fields, and failure fallbacks.
+     * Resolve latitude and longitude for a given city string or City model.
+     */
+    protected function resolveCoordinates(string $city): array
+    {
+        $normalizedCity = strtolower(trim($city));
+
+        // 1. Try static map
+        if (isset($this->cityCoordinates[$normalizedCity])) {
+            return $this->cityCoordinates[$normalizedCity];
+        }
+
+        // 2. Try database
+        $dbCity = City::where('name', 'like', "%{$city}%")
+            ->orWhere('slug', 'like', "%{$normalizedCity}%")
+            ->first();
+
+        if ($dbCity) {
+            return [
+                'lat' => (float) $dbCity->latitude,
+                'lon' => (float) $dbCity->longitude,
+                'name' => $dbCity->name,
+            ];
+        }
+
+        // Default fallback to Lisbon
+        return $this->cityCoordinates['lisboa'];
+    }
+
+    /**
+     * Get current weather and 7-day forecast for a given city name.
+     * Handles timeout (3s), caching (30m), and failure fallbacks.
      */
     public function getWeatherForCity(?string $city): ?array
     {
@@ -65,14 +103,9 @@ class WeatherService
         }
 
         $normalizedCity = strtolower(trim($city));
-        $cacheKey = 'weather_city_' . $normalizedCity;
+        $cacheKey = 'weather_city_extended_' . $normalizedCity;
 
-        // Check if we have valid coordinates for the city
-        $coords = $this->cityCoordinates[$normalizedCity] ?? null;
-        if (! $coords) {
-            // Default to Lisbon if city not mapped
-            $coords = $this->cityCoordinates['lisbon'];
-        }
+        $coords = $this->resolveCoordinates($city);
 
         // Check cache first
         if (Cache::has($cacheKey)) {
@@ -88,6 +121,7 @@ class WeatherService
                     'latitude' => $coords['lat'],
                     'longitude' => $coords['lon'],
                     'current' => 'temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m',
+                    'daily' => 'weather_code,temperature_2m_max,temperature_2m_min',
                     'timezone' => 'auto',
                 ]);
 
@@ -108,6 +142,31 @@ class WeatherService
             $weatherCode = $current['weather_code'] ?? 0;
             $weatherMeta = $this->weatherCodes[$weatherCode] ?? ['desc' => 'Partly cloudy', 'icon' => '⛅'];
 
+            // Process 7-day forecast
+            $dailyForecast = [];
+            if (isset($data['daily']) && isset($data['daily']['time'])) {
+                $days = $data['daily']['time'];
+                $maxTemps = $data['daily']['temperature_2m_max'] ?? [];
+                $minTemps = $data['daily']['temperature_2m_min'] ?? [];
+                $codes = $data['daily']['weather_code'] ?? [];
+
+                foreach ($days as $index => $dateString) {
+                    $code = $codes[$index] ?? 0;
+                    $dayMeta = $this->weatherCodes[$code] ?? ['desc' => 'Partly cloudy', 'icon' => '⛅'];
+                    $carbonDate = Carbon::parse($dateString);
+
+                    $dailyForecast[] = [
+                        'date' => $dateString,
+                        'day_name' => $carbonDate->isToday() ? 'Today' : $carbonDate->format('D'),
+                        'full_date' => $carbonDate->format('d M'),
+                        'max_temp' => isset($maxTemps[$index]) ? round($maxTemps[$index], 1) : null,
+                        'min_temp' => isset($minTemps[$index]) ? round($minTemps[$index], 1) : null,
+                        'icon' => $dayMeta['icon'],
+                        'description' => $dayMeta['desc'],
+                    ];
+                }
+            }
+
             $result = [
                 'success' => true,
                 'city' => $coords['name'],
@@ -118,6 +177,7 @@ class WeatherService
                 'wind_unit' => 'km/h',
                 'description' => $weatherMeta['desc'],
                 'icon' => $weatherMeta['icon'],
+                'forecast' => $dailyForecast,
                 'last_updated' => now()->format('Y-m-d H:i:s'),
                 'from_cache' => false,
             ];
@@ -148,6 +208,7 @@ class WeatherService
             'wind_unit' => 'km/h',
             'description' => 'Temporarily unavailable',
             'icon' => '☁️',
+            'forecast' => [],
             'error' => $errorMessage,
             'last_updated' => now()->format('Y-m-d H:i:s'),
             'from_cache' => false,

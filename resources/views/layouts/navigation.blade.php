@@ -16,6 +16,9 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('destinations.index')" :active="request()->routeIs('destinations.*')">
+                        {{ __('Destinations & Weather') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('guides.index')" :active="request()->routeIs('guides.*') && !request()->routeIs('admin.*')">
                         {{ __('Guides') }}
                     </x-nav-link>
@@ -156,6 +159,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
                 {{ __('Home') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('destinations.index')" :active="request()->routeIs('destinations.*')">
+                {{ __('Destinations & Weather') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('guides.index')" :active="request()->routeIs('guides.*') && !request()->routeIs('admin.*')">
                 {{ __('Guides') }}

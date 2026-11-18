@@ -294,4 +294,57 @@ class ErasmusHubTest extends TestCase
             $response->assertStatus(404);
         }
     }
+
+    /**
+     * Test public destinations page loads with status 200 and displays EU cities.
+     */
+    public function test_destinations_page_loads(): void
+    {
+        $response = $this->get('/destinations');
+        $response->assertStatus(200);
+        $response->assertSee('Erasmus Destinations');
+        $response->assertSee('Lisboa');
+    }
+
+    /**
+     * Test destinations page with specific city selection (e.g. Zagreb).
+     */
+    public function test_destinations_page_with_city_filter(): void
+    {
+        $response = $this->get('/destinations?city=zagreb');
+        $response->assertStatus(200);
+        $response->assertSee('Zagreb');
+        $response->assertSee('Croácia');
+    }
+
+    /**
+     * Test API destinations list endpoint returns 200 with countries and cities.
+     */
+    public function test_api_destinations_index(): void
+    {
+        $response = $this->getJson('/api/v1/destinations');
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'status',
+            'data' => [
+                '*' => ['id', 'name', 'code', 'flag_emoji', 'cities'],
+            ],
+        ]);
+    }
+
+    /**
+     * Test API single destination weather endpoint returns 200 with forecast.
+     */
+    public function test_api_destination_show_with_weather(): void
+    {
+        $response = $this->getJson('/api/v1/destinations/zagreb');
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'status',
+            'data' => [
+                'city' => ['id', 'name', 'slug', 'latitude', 'longitude'],
+                'weather',
+            ],
+        ]);
+    }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController as ApiAuthController;
 use App\Http\Controllers\Api\V1\CategoryController as ApiCategoryController;
+use App\Http\Controllers\Api\V1\DestinationController as ApiDestinationController;
 use App\Http\Controllers\Api\V1\GuideController as ApiGuideController;
 use App\Http\Controllers\Api\V1\SchemaController as ApiSchemaController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,10 @@ Route::prefix('v1')->group(function () {
 
     // POST /api/v1/logout — revoke token
     Route::middleware('auth:sanctum')->post('/logout', [ApiAuthController::class, 'logout'])->name('api.v1.logout');
+
+    // ── Destinations (Countries & Cities with Weather) ───────────────────────
+    Route::get('/destinations', [ApiDestinationController::class, 'index'])->name('api.v1.destinations.index');
+    Route::get('/destinations/{slug}', [ApiDestinationController::class, 'show'])->name('api.v1.destinations.show');
 
     // ── Categories ──────────────────────────────────────────────────────────
     Route::get('/categories', [ApiCategoryController::class, 'index'])->name('api.v1.categories.index');

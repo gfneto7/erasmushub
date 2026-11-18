@@ -59,18 +59,20 @@
                         {{ __('Local Weather in Popular Erasmus Destinations') }}
                     </h3>
                 </div>
-                <span class="text-xs text-gray-400">
-                    {{ __('Powered by Open-Meteo API') }}
-                </span>
+                <div class="flex items-center space-x-3 text-xs">
+                    <a href="{{ route('destinations.index') }}" class="font-semibold text-indigo-600 hover:text-indigo-800 hover:underline">
+                        {{ __('Explore 7-Day Forecasts & All Cities') }} →
+                    </a>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 @foreach ($popularCitiesWeather as $cityName => $weather)
-                    <div class="bg-gradient-to-r from-gray-50 to-indigo-50/30 rounded-xl p-4 border border-gray-200/80 flex items-center justify-between">
+                    <a href="{{ route('destinations.index', ['city' => Str::slug($cityName)]) }}" class="bg-gradient-to-r from-gray-50 to-indigo-50/30 hover:to-indigo-100/50 rounded-xl p-4 border border-gray-200/80 hover:border-indigo-300 transition flex items-center justify-between group">
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl">{{ $weather['icon'] ?? '⛅' }}</span>
                             <div>
-                                <h4 class="font-bold text-gray-900 text-base">{{ $cityName }}</h4>
+                                <h4 class="font-bold text-gray-900 text-base group-hover:text-indigo-600 transition">{{ $cityName }}</h4>
                                 <p class="text-xs text-gray-500">{{ $weather['description'] ?? 'Sunny' }}</p>
                             </div>
                         </div>
@@ -84,9 +86,10 @@
                                 @else
                                     {{ __('Live') }}
                                 @endif
+                                · {{ __('7-Day Forecast') }} →
                             </p>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         </div>

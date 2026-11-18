@@ -16,6 +16,7 @@ class Guide extends Model
         'summary',
         'content',
         'category_id',
+        'city_id',
         'city',
         'status',
         'published_at',
@@ -31,6 +32,11 @@ class Guide extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function destinationCity(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
 
     public function author(): BelongsTo
