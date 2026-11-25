@@ -61,17 +61,22 @@
                         {{ $guide->summary }}
                     </div>
 
-                    <!-- Complementary Image (if exists) -->
-                    @if ($guide->image)
-                        <div class="my-8 rounded-2xl overflow-hidden shadow-md border border-gray-200">
+                    <!-- Complementary Image -->
+                    <div class="my-8 rounded-2xl overflow-hidden shadow-md border border-gray-200">
+                        @if ($guide->image)
                             <img src="{{ asset('storage/' . $guide->image->path) }}" alt="{{ $guide->image->alt_text ?? $guide->title }}" class="w-full h-auto max-h-[500px] object-cover">
                             @if ($guide->image->alt_text)
                                 <p class="text-xs text-center text-gray-400 py-2 bg-gray-50 italic border-t border-gray-100">
                                     {{ $guide->image->alt_text }}
                                 </p>
                             @endif
-                        </div>
-                    @endif
+                        @elseif ($guide->city)
+                            <x-city-image :city="$guide->city" :alt="$guide->title" class="w-full max-h-[400px] object-cover" :width="1200" :height="400" />
+                            <p class="text-xs text-center text-gray-400 py-2 bg-gray-50 italic border-t border-gray-100">
+                                📍 {{ $guide->city }}
+                            </p>
+                        @endif
+                    </div>
 
                     <!-- Guide Content (Rich text, sanitized) -->
                     <div class="prose max-w-none text-gray-800 leading-relaxed text-base">

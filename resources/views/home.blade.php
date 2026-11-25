@@ -1,16 +1,24 @@
 <x-app-layout>
     <!-- Hero Section -->
-    <div class="relative bg-gradient-to-br from-indigo-900 via-indigo-800 to-sky-900 text-white overflow-hidden py-16 sm:py-24">
-        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="relative text-white overflow-hidden" style="min-height: 480px;">
+        <!-- Background city photo -->
+        <div class="absolute inset-0">
+            <img
+                src="https://picsum.photos/seed/erasmushub/1600/600"
+                alt="Erasmus students in Europe"
+                class="w-full h-full object-cover"
+            >
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/85 via-indigo-800/80 to-sky-900/75"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 text-center">
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 mb-4 backdrop-blur-sm">
                 🇪🇺 {{ __('Erasmus+ Community Portal') }}
             </span>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight drop-shadow-lg">
                 {{ __('Welcome to ErasmusHub') }}
             </h1>
-            <p class="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-indigo-100 font-normal leading-relaxed">
+            <p class="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-indigo-100 font-normal leading-relaxed drop-shadow">
                 {{ __('Your ultimate companion for an unforgettable Erasmus experience. Discover local guides, survival tips, accommodation advice, and city insights curated by students, for students.') }}
             </p>
 
@@ -30,7 +38,7 @@
             </form>
 
             <!-- Quick Action Buttons -->
-            <div class="mt-8 flex justify-center gap-4">
+            <div class="mt-8 flex justify-center gap-4 flex-wrap">
                 <a href="{{ route('guides.index') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-indigo-900 font-semibold shadow hover:bg-indigo-50 transition">
                     {{ __('Explore Guides') }} →
                 </a>
@@ -137,15 +145,13 @@
                 @foreach ($featuredGuides as $guide)
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-200/80 overflow-hidden hover:shadow-md transition flex flex-col">
                         <!-- Image or default banner -->
-                        <div class="h-48 w-full bg-gradient-to-tr from-indigo-500 to-sky-400 relative overflow-hidden flex items-center justify-center text-white">
+                        <div class="h-48 w-full relative overflow-hidden">
                             @if ($guide->image)
                                 <img src="{{ asset('storage/' . $guide->image->path) }}" alt="{{ $guide->image->alt_text ?? $guide->title }}" class="w-full h-full object-cover">
                             @else
-                                <div class="text-center p-4">
-                                    <span class="text-4xl">🏛️</span>
-                                    <p class="text-xs uppercase font-bold tracking-wider mt-2 opacity-90">{{ $guide->city ?? 'Europe' }}</p>
-                                </div>
+                                <x-city-image :city="$guide->city" :alt="$guide->title" />
                             @endif
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                             <div class="absolute top-3 left-3">
                                 <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-white/90 text-indigo-900 backdrop-blur-sm shadow-sm">
                                     {{ $guide->category->name }}

@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\V1\GuideController as ApiGuideController;
 use App\Http\Controllers\Api\V1\SchemaController as ApiSchemaController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware(['throttle:api'])->group(function () {
     // ── Auth ────────────────────────────────────────────────────────────────
     // POST /api/v1/login  — get a Sanctum token (for Postman/Bruno testing)
     Route::post('/login', [ApiAuthController::class, 'login'])->name('api.v1.login');
