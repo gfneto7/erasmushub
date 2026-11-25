@@ -1,30 +1,33 @@
 <x-app-layout>
     <!-- Hero Section -->
-    <div class="relative text-white overflow-hidden" style="min-height: 480px;">
-        <!-- Background city photo -->
+    <div class="relative text-white overflow-hidden" style="min-height: 500px;">
+        <!-- Background city photo — Lisbon panorama via Unsplash -->
         <div class="absolute inset-0">
             <img
-                src="https://picsum.photos/seed/erasmushub/1600/600"
+                src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1600&h=600&fit=crop&q=80"
                 alt="Erasmus students in Europe"
                 class="w-full h-full object-cover"
+                onerror="this.onerror=null; this.src='https://picsum.photos/seed/erasmus-eu/1600/600';"
             >
-            <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/85 via-indigo-800/80 to-sky-900/75"></div>
+            <!-- Two-layer dark overlay: bottom-to-top black + top indigo tint -->
+            <div class="absolute inset-0 bg-black/60"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-indigo-900/50 via-transparent to-indigo-950/70"></div>
         </div>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 text-center">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 mb-4 backdrop-blur-sm">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 text-center">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-white border border-white/30 mb-6 backdrop-blur-sm">
                 🇪🇺 {{ __('Erasmus+ Community Portal') }}
             </span>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight drop-shadow-lg">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight" style="text-shadow: 0 2px 16px rgba(0,0,0,0.7);">
                 {{ __('Welcome to ErasmusHub') }}
             </h1>
-            <p class="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-indigo-100 font-normal leading-relaxed drop-shadow">
+            <p class="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-white/90 font-normal leading-relaxed" style="text-shadow: 0 1px 8px rgba(0,0,0,0.6);">
                 {{ __('Your ultimate companion for an unforgettable Erasmus experience. Discover local guides, survival tips, accommodation advice, and city insights curated by students, for students.') }}
             </p>
 
             <!-- Search Bar in Hero -->
-            <form action="{{ route('guides.index') }}" method="GET" class="mt-8 max-w-2xl mx-auto">
-                <div class="flex items-center bg-white rounded-2xl p-2 shadow-2xl">
+            <form action="{{ route('guides.index') }}" method="GET" class="mt-10 max-w-2xl mx-auto">
+                <div class="flex items-center bg-white rounded-2xl p-2 shadow-2xl ring-2 ring-white/20">
                     <div class="pl-3 text-gray-400">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -39,17 +42,17 @@
 
             <!-- Quick Action Buttons -->
             <div class="mt-8 flex justify-center gap-4 flex-wrap">
-                <a href="{{ route('guides.index') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-indigo-900 font-semibold shadow hover:bg-indigo-50 transition">
+                <a href="{{ route('guides.index') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-indigo-900 font-semibold shadow-lg hover:bg-indigo-50 transition">
                     {{ __('Explore Guides') }} →
                 </a>
                 @auth
                     @if (Auth::user()->canManageGuides())
-                        <a href="{{ route('admin.guides.create') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-indigo-600/80 hover:bg-indigo-600 text-white font-semibold border border-indigo-400/40 backdrop-blur-sm transition">
+                        <a href="{{ route('admin.guides.create') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold border border-indigo-400/40 backdrop-blur-sm transition shadow-lg">
                             ✏️ {{ __('Create Guide') }}
                         </a>
                     @endif
                 @else
-                    <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-indigo-700/60 hover:bg-indigo-700 text-white font-semibold border border-indigo-500/40 backdrop-blur-sm transition">
+                    <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold border border-indigo-400/40 backdrop-blur-sm transition shadow-lg">
                         {{ __('Register') }}
                     </a>
                 @endauth
