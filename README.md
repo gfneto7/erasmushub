@@ -224,7 +224,7 @@ O esquema formal está localizado em `public/schemas/guide-schema.json`. Pode se
 ```
 
 ### Consumo no Frontend:
-Na página de Guias (`/guides`), é possível alternar entre a listagem tradicional e a **Pesquisa Dinâmica via REST API (⚡ Live API Search)**, que executa chamadas assíncronas em JavaScript (`fetch('/api/v1/guides')`) e renderiza dinamicamente os resultados no DOM.
+Na página de Destinos (`/destinations`), a aplicação consome ativamente o endpoint `/api/v1/destinations/{slug}` para obter os dados meteorológicos a 7 dias de cada cidade via JavaScript assíncrono, integrando o resultado diretamente na interface do utilizador.
 
 ---
 
