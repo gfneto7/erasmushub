@@ -91,12 +91,8 @@
                     @foreach ($guides as $guide)
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition flex flex-col">
                             <!-- Image Header -->
-                            <div class="h-48 w-full relative overflow-hidden">
-                                @if ($guide->image)
-                                    <img src="{{ asset('storage/' . $guide->image->path) }}" alt="{{ $guide->image->alt_text ?? $guide->title }}" class="w-full h-full object-cover">
-                                @else
-                                    <x-city-image :city="$guide->city" :alt="$guide->title" />
-                                @endif
+                            <div class="h-48 w-full relative overflow-hidden bg-gray-100">
+                                <img src="{{ $guide->image_full_url }}" alt="{{ $guide->title }}" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                                 <div class="absolute top-3 left-3">
                                     <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-white/90 text-indigo-900 backdrop-blur-sm shadow-sm">

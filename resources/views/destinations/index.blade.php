@@ -55,6 +55,15 @@
                             </span>
                         </div>
 
+                        @php
+                            $cityImgPath = "images/cities/{$currentCity->slug}.jpg";
+                        @endphp
+                        @if (file_exists(public_path($cityImgPath)))
+                            <div class="h-44 w-full rounded-2xl overflow-hidden mb-4 shadow-sm border border-gray-100">
+                                <img src="{{ asset($cityImgPath) }}" alt="{{ $currentCity->name }}" class="w-full h-full object-cover">
+                            </div>
+                        @endif
+
                         <h2 class="text-3xl font-extrabold text-gray-900">
                             {{ $currentCity->name }}
                         </h2>

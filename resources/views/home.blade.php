@@ -1,61 +1,73 @@
 <x-app-layout>
-    <!-- Hero Section -->
-    <div class="relative text-white overflow-hidden" style="min-height: 500px;">
-        <!-- Background city photo — Lisbon panorama via Unsplash -->
-        <div class="absolute inset-0">
-            <img
-                src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1600&h=600&fit=crop&q=80"
-                alt="Erasmus students in Europe"
-                class="w-full h-full object-cover"
-                onerror="this.onerror=null; this.src='https://picsum.photos/seed/erasmus-eu/1600/600';"
-            >
-            <!-- Two-layer dark overlay: bottom-to-top black + top indigo tint -->
-            <div class="absolute inset-0 bg-black/60"></div>
-            <div class="absolute inset-0 bg-gradient-to-b from-indigo-900/50 via-transparent to-indigo-950/70"></div>
-        </div>
+    <!-- Hero Section: Layout dividido, texto 100% nítido em fundo sólido, sem texto por cima de fotos -->
+    <div class="bg-slate-900 text-white py-12 sm:py-16 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                
+                <!-- Coluna Esquerda: Texto de alto contraste e Pesquisa -->
+                <div class="lg:col-span-7 space-y-5 text-left">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        🇪🇺 {{ __('Erasmus+ Community Portal') }}
+                    </span>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 text-center">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-white border border-white/30 mb-6 backdrop-blur-sm">
-                🇪🇺 {{ __('Erasmus+ Community Portal') }}
-            </span>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight" style="text-shadow: 0 2px 16px rgba(0,0,0,0.7);">
-                {{ __('Welcome to ErasmusHub') }}
-            </h1>
-            <p class="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-white/90 font-normal leading-relaxed" style="text-shadow: 0 1px 8px rgba(0,0,0,0.6);">
-                {{ __('Your ultimate companion for an unforgettable Erasmus experience. Discover local guides, survival tips, accommodation advice, and city insights curated by students, for students.') }}
-            </p>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                        {{ __('Welcome to ErasmusHub') }}
+                    </h1>
 
-            <!-- Search Bar in Hero -->
-            <form action="{{ route('guides.index') }}" method="GET" class="mt-10 max-w-2xl mx-auto">
-                <div class="flex items-center bg-white rounded-2xl p-2 shadow-2xl ring-2 ring-white/20">
-                    <div class="pl-3 text-gray-400">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                    </div>
-                    <input type="text" name="search" placeholder="{{ __('Search by title or keyword...') }}" class="w-full border-0 focus:ring-0 text-gray-800 text-base px-3 py-2 focus:outline-none placeholder-gray-400">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow transition">
-                        {{ __('Search') }}
-                    </button>
-                </div>
-            </form>
+                    <p class="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
+                        {{ __('Your ultimate companion for an unforgettable Erasmus experience. Discover local guides, survival tips, accommodation advice, and city insights curated by students, for students.') }}
+                    </p>
 
-            <!-- Quick Action Buttons -->
-            <div class="mt-8 flex justify-center gap-4 flex-wrap">
-                <a href="{{ route('guides.index') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-indigo-900 font-semibold shadow-lg hover:bg-indigo-50 transition">
-                    {{ __('Explore Guides') }} →
-                </a>
-                @auth
-                    @if (Auth::user()->canManageGuides())
-                        <a href="{{ route('admin.guides.create') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold border border-indigo-400/40 backdrop-blur-sm transition shadow-lg">
-                            ✏️ {{ __('Create Guide') }}
+                    <!-- Barra de Pesquisa de Guias -->
+                    <form action="{{ route('guides.index') }}" method="GET" class="max-w-xl pt-2">
+                        <div class="flex items-center bg-white rounded-xl p-1.5 shadow-md">
+                            <div class="pl-3 text-gray-400">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </div>
+                            <input type="text" name="search" placeholder="{{ __('Search by title or keyword...') }}" class="w-full border-0 focus:ring-0 text-gray-800 text-sm px-3 py-2 focus:outline-none placeholder-gray-400">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition">
+                                {{ __('Search') }}
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Botões de Ação Rápida -->
+                    <div class="flex items-center gap-3 pt-2">
+                        <a href="{{ route('guides.index') }}" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-white text-slate-900 font-semibold text-sm shadow hover:bg-slate-100 transition">
+                            📖 {{ __('Explore Guides') }}
                         </a>
-                    @endif
-                @else
-                    <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold border border-indigo-400/40 backdrop-blur-sm transition shadow-lg">
-                        {{ __('Register') }}
-                    </a>
-                @endauth
+                        <a href="{{ route('destinations.index') }}" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700 transition">
+                            🌍 {{ __('Destinations & Weather') }}
+                        </a>
+                        @auth
+                            @if (Auth::user()->canManageGuides())
+                                <a href="{{ route('admin.guides.create') }}" class="inline-flex items-center px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">
+                                    ✏️ {{ __('Create Guide') }}
+                                </a>
+                            @endif
+                        @endauth
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Cartão fotográfico em destaque -->
+                <div class="lg:col-span-5">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-700 bg-slate-800">
+                        <img src="{{ asset('images/cities/lisboa.jpg') }}" alt="Lisboa - Praça do Comércio" class="w-full h-72 sm:h-80 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-4">
+                            <div>
+                                <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-indigo-600 text-white">
+                                    📍 Praça do Comércio &bull; Lisboa
+                                </span>
+                                <p class="text-xs text-slate-200 mt-2 font-medium">
+                                    {{ __('Explore 16+ Erasmus destinations with verified student tips and live weather.') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -148,12 +160,8 @@
                 @foreach ($featuredGuides as $guide)
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-200/80 overflow-hidden hover:shadow-md transition flex flex-col">
                         <!-- Image or default banner -->
-                        <div class="h-48 w-full relative overflow-hidden">
-                            @if ($guide->image)
-                                <img src="{{ asset('storage/' . $guide->image->path) }}" alt="{{ $guide->image->alt_text ?? $guide->title }}" class="w-full h-full object-cover">
-                            @else
-                                <x-city-image :city="$guide->city" :alt="$guide->title" />
-                            @endif
+                        <div class="h-48 w-full relative overflow-hidden bg-gray-100">
+                            <img src="{{ $guide->image_full_url }}" alt="{{ $guide->title }}" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                             <div class="absolute top-3 left-3">
                                 <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-white/90 text-indigo-900 backdrop-blur-sm shadow-sm">
