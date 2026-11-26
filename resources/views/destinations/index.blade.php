@@ -141,7 +141,7 @@
                                         {{ $weather['temperature'] ?? '--' }}{{ $weather['temperature_unit'] ?? '°C' }}
                                     </div>
                                     <div class="text-sm font-medium text-indigo-200 mt-1">
-                                        {{ $weather['description'] ?? __('Partly cloudy') }}
+                                        {{ __($weather['description'] ?? 'Partly cloudy') }}
                                     </div>
                                 </div>
                             </div>

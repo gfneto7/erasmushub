@@ -1,73 +1,61 @@
 <x-app-layout>
-    <!-- Hero Section: Layout dividido, texto 100% nítido em fundo sólido, sem texto por cima de fotos -->
-    <div class="bg-slate-900 text-white py-12 sm:py-16 border-b border-slate-800">
+    <!-- 1. Banner Panorâmico Erasmus & Europa (Ocupa a largura total, altura moderada e elegante) -->
+    <div class="w-full relative overflow-hidden bg-slate-900" style="height: 220px;">
+        <img src="{{ asset('images/erasmus-banner.jpg') }}" alt="Erasmus+ European Community" class="w-full h-full object-cover object-center">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-transparent flex items-end">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-5 w-full flex items-center justify-between">
+                <span class="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-bold bg-indigo-600 text-white shadow-md">
+                    🇪🇺 {{ __('Erasmus+ Community Portal') }}
+                </span>
+                <span class="text-xs font-semibold text-slate-200 hidden sm:inline-block drop-shadow">
+                    🌍 {{ __('Explore 16+ Erasmus destinations with verified student tips and live weather.') }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Secção de Introdução e Pesquisa (Fundo Branco Limpo, Texto Escuro 100% Legível) -->
+    <div class="bg-white border-b border-gray-200 py-8 sm:py-10 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                
-                <!-- Coluna Esquerda: Texto de alto contraste e Pesquisa -->
-                <div class="lg:col-span-7 space-y-5 text-left">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                        🇪🇺 {{ __('Erasmus+ Community Portal') }}
-                    </span>
+            <div class="max-w-3xl">
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+                    {{ __('Welcome to ErasmusHub') }}
+                </h1>
+                <p class="mt-3 text-base sm:text-lg text-gray-600 leading-relaxed">
+                    {{ __('Your ultimate companion for an unforgettable Erasmus experience. Discover local guides, survival tips, accommodation advice, and city insights curated by students, for students.') }}
+                </p>
 
-                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                        {{ __('Welcome to ErasmusHub') }}
-                    </h1>
-
-                    <p class="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                        {{ __('Your ultimate companion for an unforgettable Erasmus experience. Discover local guides, survival tips, accommodation advice, and city insights curated by students, for students.') }}
-                    </p>
-
-                    <!-- Barra de Pesquisa de Guias -->
-                    <form action="{{ route('guides.index') }}" method="GET" class="max-w-xl pt-2">
-                        <div class="flex items-center bg-white rounded-xl p-1.5 shadow-md">
-                            <div class="pl-3 text-gray-400">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                                </svg>
-                            </div>
-                            <input type="text" name="search" placeholder="{{ __('Search by title or keyword...') }}" class="w-full border-0 focus:ring-0 text-gray-800 text-sm px-3 py-2 focus:outline-none placeholder-gray-400">
-                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition">
-                                {{ __('Search') }}
-                            </button>
+                <!-- Barra de Pesquisa -->
+                <form action="{{ route('guides.index') }}" method="GET" class="mt-6 max-w-xl">
+                    <div class="flex items-center bg-gray-50 rounded-xl p-1.5 border border-gray-300 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+                        <div class="pl-3 text-gray-400">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
                         </div>
-                    </form>
-
-                    <!-- Botões de Ação Rápida -->
-                    <div class="flex items-center gap-3 pt-2">
-                        <a href="{{ route('guides.index') }}" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-white text-slate-900 font-semibold text-sm shadow hover:bg-slate-100 transition">
-                            📖 {{ __('Explore Guides') }}
-                        </a>
-                        <a href="{{ route('destinations.index') }}" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700 transition">
-                            🌍 {{ __('Destinations & Weather') }}
-                        </a>
-                        @auth
-                            @if (Auth::user()->canManageGuides())
-                                <a href="{{ route('admin.guides.create') }}" class="inline-flex items-center px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition">
-                                    ✏️ {{ __('Create Guide') }}
-                                </a>
-                            @endif
-                        @endauth
+                        <input type="text" name="search" placeholder="{{ __('Search by title or keyword...') }}" class="w-full bg-transparent border-0 focus:ring-0 text-gray-900 text-sm px-3 py-2 focus:outline-none placeholder-gray-400">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-lg text-sm shadow transition">
+                            {{ __('Search') }}
+                        </button>
                     </div>
-                </div>
+                </form>
 
-                <!-- Coluna Direita: Cartão fotográfico em destaque -->
-                <div class="lg:col-span-5">
-                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-700 bg-slate-800">
-                        <img src="{{ asset('images/cities/lisboa.jpg') }}" alt="Lisboa - Praça do Comércio" class="w-full h-72 sm:h-80 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-4">
-                            <div>
-                                <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-indigo-600 text-white">
-                                    📍 Praça do Comércio &bull; Lisboa
-                                </span>
-                                <p class="text-xs text-slate-200 mt-2 font-medium">
-                                    {{ __('Explore 16+ Erasmus destinations with verified student tips and live weather.') }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Botões de Ação Rápida -->
+                <div class="mt-6 flex flex-wrap items-center gap-3">
+                    <a href="{{ route('guides.index') }}" class="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-sm border border-indigo-200 transition">
+                        📖 {{ __('Explore Guides') }}
+                    </a>
+                    <a href="{{ route('destinations.index') }}" class="inline-flex items-center px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold text-sm border border-gray-200 transition">
+                        🌍 {{ __('Destinations & Weather') }}
+                    </a>
+                    @auth
+                        @if (Auth::user()->canManageGuides())
+                            <a href="{{ route('admin.guides.create') }}" class="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition shadow-sm">
+                                ✏️ {{ __('Create Guide') }}
+                            </a>
+                        @endif
+                    @endauth
                 </div>
-
             </div>
         </div>
     </div>
@@ -96,7 +84,7 @@
                             <span class="text-3xl">{{ $weather['icon'] ?? '⛅' }}</span>
                             <div>
                                 <h4 class="font-bold text-gray-900 text-base group-hover:text-indigo-600 transition">{{ $cityName }}</h4>
-                                <p class="text-xs text-gray-500">{{ $weather['description'] ?? 'Sunny' }}</p>
+                                <p class="text-xs text-gray-500">{{ __($weather['description'] ?? 'Sunny') }}</p>
                             </div>
                         </div>
                         <div class="text-right">

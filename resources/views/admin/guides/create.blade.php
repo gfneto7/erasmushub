@@ -18,7 +18,7 @@
             @if ($errors->any())
                 <div class="rounded-2xl bg-rose-50 p-4 border border-rose-200">
                     <div class="text-sm font-bold text-rose-800 mb-2">
-                        ⚠️ Please correct the errors below:
+                        ⚠️ {{ __('Please correct the errors below:') }}
                     </div>
                     <ul class="list-disc pl-5 text-xs text-rose-700 space-y-1">
                         @foreach ($errors->all() as $error)
@@ -62,7 +62,7 @@
                 <!-- City -->
                 <div>
                     <label for="city" class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                        {{ __('City') }} (Erasmus Destination)
+                        {{ __('City') }} ({{ __('Erasmus Destination') }})
                     </label>
                     <input type="text" name="city" id="city" value="{{ old('city') }}" placeholder="e.g. Lisboa, Zagreb, Porto..." class="w-full text-sm rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
                     @error('city')
@@ -88,7 +88,7 @@
             <!-- Summary -->
             <div>
                 <label for="summary" class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                    {{ __('Summary') }} (Introductory excerpt, max 500 chars) <span class="text-rose-500">*</span>
+                    {{ __('Summary') }} ({{ __('Introductory excerpt, max 500 chars') }}) <span class="text-rose-500">*</span>
                 </label>
                 <textarea name="summary" id="summary" rows="3" required maxlength="500" class="w-full text-sm rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" placeholder="Brief summary of the guide...">{{ old('summary') }}</textarea>
                 @error('summary')
@@ -99,7 +99,7 @@
             <!-- Content (Rich Text Input) -->
             <div>
                 <label for="content" class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                    {{ __('Content') }} (Rich Text HTML Supported: &lt;p&gt;, &lt;b&gt;, &lt;h2&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;a&gt;) <span class="text-rose-500">*</span>
+                    {{ __('Content') }} ({{ __('Rich text HTML supported') }}) <span class="text-rose-500">*</span>
                 </label>
                 <!-- Helpful HTML formatting toolbar -->
                 <div class="flex flex-wrap gap-1 p-2 bg-gray-50 border border-gray-300 border-b-0 rounded-t-xl text-xs">
@@ -121,7 +121,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-100">
                 <div>
                     <label for="image" class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                        {{ __('Upload Image') }} (JPG, PNG, WEBP, max 2MB)
+                        {{ __('Upload Image') }} ({{ __('JPG, PNG, WEBP, max 2MB') }})
                     </label>
                     <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/webp" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                     @error('image')
@@ -131,7 +131,7 @@
 
                 <div>
                     <label for="alt_text" class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                        Alt Text (Accessibility)
+                        {{ __('Alt Text (Accessibility)') }}
                     </label>
                     <input type="text" name="alt_text" id="alt_text" value="{{ old('alt_text') }}" placeholder="Description of the image..." class="w-full text-sm rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
                 </div>
