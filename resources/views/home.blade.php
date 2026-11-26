@@ -117,7 +117,7 @@
         <div class="flex flex-wrap gap-2">
             @foreach ($categories as $category)
                 <a href="{{ route('guides.index', ['category' => $category->slug]) }}" class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:border-indigo-400 hover:text-indigo-600 hover:shadow-sm transition">
-                    <span>{{ $category->name }}</span>
+                    <span>{{ __($category->name) }}</span>
                     <span class="ms-2 px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600 font-semibold">
                         {{ $category->guides_count }}
                     </span>
@@ -153,13 +153,13 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                             <div class="absolute top-3 left-3">
                                 <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-white/90 text-indigo-900 backdrop-blur-sm shadow-sm">
-                                    {{ $guide->category->name }}
+                                    {{ __($guide->category->name) }}
                                 </span>
                             </div>
                             @if ($guide->city)
                                 <div class="absolute top-3 right-3">
                                     <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-black/50 text-white backdrop-blur-sm">
-                                        📍 {{ $guide->city }}
+                                        📍 {{ __($guide->city) }}
                                     </span>
                                 </div>
                             @endif

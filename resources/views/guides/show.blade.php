@@ -25,11 +25,11 @@
                     <!-- Badges & Metadata -->
                     <div class="flex flex-wrap items-center gap-2 mb-4">
                         <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100">
-                            {{ $guide->category->name }}
+                            {{ __($guide->category->name) }}
                         </span>
                         @if ($guide->city)
                             <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-gray-100 text-gray-700 border border-gray-200">
-                                📍 {{ $guide->city }}
+                                📍 {{ __($guide->city) }}
                             </span>
                         @endif
                         @if ($guide->status === 'draft')
@@ -70,7 +70,7 @@
                             </p>
                         @elseif ($guide->city)
                             <p class="text-xs text-center text-gray-400 py-2 bg-gray-50 italic border-t border-gray-100">
-                                📍 {{ $guide->city }}
+                                📍 {{ __($guide->city) }}
                             </p>
                         @endif
                     </div>

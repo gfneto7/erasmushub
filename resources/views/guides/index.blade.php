@@ -96,13 +96,13 @@
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                                 <div class="absolute top-3 left-3">
                                     <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-white/90 text-indigo-900 backdrop-blur-sm shadow-sm">
-                                        {{ $guide->category->name }}
+                                        {{ __($guide->category->name) }}
                                     </span>
                                 </div>
                                 @if ($guide->city)
                                     <div class="absolute top-3 right-3">
                                         <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-black/50 text-white backdrop-blur-sm">
-                                            📍 {{ $guide->city }}
+                                            📍 {{ __($guide->city) }}
                                         </span>
                                     </div>
                                 @endif

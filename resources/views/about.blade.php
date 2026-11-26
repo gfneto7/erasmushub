@@ -126,61 +126,61 @@
                 <table class="min-w-full divide-y divide-gray-200 text-sm">
                     <thead>
                         <tr class="bg-gray-50 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                            <th class="px-4 py-3">Method</th>
-                            <th class="px-4 py-3">Endpoint</th>
-                            <th class="px-4 py-3">Authorization</th>
-                            <th class="px-4 py-3">Description</th>
-                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">{{ __('Method') }}</th>
+                            <th class="px-4 py-3">{{ __('Endpoint') }}</th>
+                            <th class="px-4 py-3">{{ __('Authorization') }}</th>
+                            <th class="px-4 py-3">{{ __('Description') }}</th>
+                            <th class="px-4 py-3">{{ __('Status') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 bg-white">
                         <tr>
                             <td class="px-4 py-3 font-mono font-bold text-emerald-600">GET</td>
                             <td class="px-4 py-3 font-mono text-gray-800"><a href="{{ url('/api/v1/guides') }}" target="_blank" class="hover:underline">/api/v1/guides</a></td>
-                            <td class="px-4 py-3 text-gray-500">Public</td>
-                            <td class="px-4 py-3 text-gray-600">List published guides (paginated, filters: search, city, category_id)</td>
+                            <td class="px-4 py-3 text-gray-500">{{ __('Public') }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ __('List published guides (paginated, filters: search, city, category_id)') }}</td>
                             <td class="px-4 py-3 font-mono text-xs text-gray-600">200 OK</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 font-mono font-bold text-emerald-600">GET</td>
                             <td class="px-4 py-3 font-mono text-gray-800">/api/v1/guides/{id}</td>
-                            <td class="px-4 py-3 text-gray-500">Public</td>
-                            <td class="px-4 py-3 text-gray-600">Get single published guide (draft returns 404)</td>
+                            <td class="px-4 py-3 text-gray-500">{{ __('Public') }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ __('Get single published guide (draft returns 404)') }}</td>
                             <td class="px-4 py-3 font-mono text-xs text-gray-600">200, 404</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 font-mono font-bold text-blue-600">POST</td>
                             <td class="px-4 py-3 font-mono text-gray-800">/api/v1/guides</td>
-                            <td class="px-4 py-3 text-gray-500">Editor / Admin</td>
-                            <td class="px-4 py-3 text-gray-600">Create new guide with validation</td>
+                            <td class="px-4 py-3 text-gray-500">{{ __('Editor / Admin') }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ __('Create new guide with validation') }}</td>
                             <td class="px-4 py-3 font-mono text-xs text-gray-600">201, 400, 403</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 font-mono font-bold text-amber-600">PATCH</td>
                             <td class="px-4 py-3 font-mono text-gray-800">/api/v1/guides/{id}</td>
-                            <td class="px-4 py-3 text-gray-500">Author / Admin</td>
-                            <td class="px-4 py-3 text-gray-600">Update existing guide</td>
+                            <td class="px-4 py-3 text-gray-500">{{ __('Author / Admin') }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ __('Update existing guide') }}</td>
                             <td class="px-4 py-3 font-mono text-xs text-gray-600">200, 400, 403, 404</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 font-mono font-bold text-rose-600">DELETE</td>
                             <td class="px-4 py-3 font-mono text-gray-800">/api/v1/guides/{id}</td>
-                            <td class="px-4 py-3 text-gray-500">Author / Admin</td>
-                            <td class="px-4 py-3 text-gray-600">Delete guide (empty body on success)</td>
+                            <td class="px-4 py-3 text-gray-500">{{ __('Author / Admin') }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ __('Delete guide (empty body on success)') }}</td>
                             <td class="px-4 py-3 font-mono text-xs text-gray-600">204 No Content</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 font-mono font-bold text-emerald-600">GET</td>
                             <td class="px-4 py-3 font-mono text-gray-800"><a href="{{ url('/api/v1/categories') }}" target="_blank" class="hover:underline">/api/v1/categories</a></td>
-                            <td class="px-4 py-3 text-gray-500">Public</td>
-                            <td class="px-4 py-3 text-gray-600">List all categories with published guides count</td>
+                            <td class="px-4 py-3 text-gray-500">{{ __('Public') }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ __('List all categories with published guides count') }}</td>
                             <td class="px-4 py-3 font-mono text-xs text-gray-600">200 OK</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 font-mono font-bold text-purple-600">POST</td>
                             <td class="px-4 py-3 font-mono text-gray-800">/api/v1/validate-guide-schema</td>
-                            <td class="px-4 py-3 text-gray-500">Public</td>
-                            <td class="px-4 py-3 text-gray-600">Validates incoming payload against JSON Schema definition</td>
+                            <td class="px-4 py-3 text-gray-500">{{ __('Public') }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ __('Validates incoming payload against JSON Schema definition') }}</td>
                             <td class="px-4 py-3 font-mono text-xs text-gray-600">200 Valid, 400 Invalid</td>
                         </tr>
                     </tbody>
@@ -190,7 +190,7 @@
             <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
                 <span>Schema file location: <code class="bg-gray-100 px-2 py-0.5 rounded font-mono">/public/schemas/guide-schema.json</code></span>
                 <a href="{{ url('/schemas/guide-schema.json') }}" target="_blank" class="text-indigo-600 font-bold hover:underline">
-                    View raw JSON Schema file &rarr;
+                    {{ __('View raw JSON Schema file') }} &rarr;
                 </a>
             </div>
         </div>
