@@ -123,7 +123,7 @@
 
                                 <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
                                     <div class="flex items-center space-x-2">
-                                        <span class="font-medium text-gray-700">{{ $guide->author->name }}</span>
+                                        <span class="font-medium text-gray-700">{{ __($guide->author->name) }}</span>
                                         <span>•</span>
                                         <span>{{ $guide->published_at?->format('d M Y') }}</span>
                                     </div>

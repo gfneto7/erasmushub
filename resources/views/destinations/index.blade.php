@@ -260,7 +260,7 @@
                                 </div>
 
                                 <div class="mt-4 pt-4 border-t border-gray-200/60 flex items-center justify-between text-xs">
-                                    <span class="text-gray-500">{{ __('By') }} {{ $guide->author->name }}</span>
+                                    <span class="text-gray-500">{{ __('By') }} {{ __($guide->author->name) }}</span>
                                     <a href="{{ route('guides.show', $guide->slug) }}" class="text-indigo-600 font-semibold hover:underline">
                                         {{ __('Read more') }} →
                                     </a>

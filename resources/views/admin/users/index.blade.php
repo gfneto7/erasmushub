@@ -75,9 +75,9 @@
                                 <td class="px-6 py-4 font-bold text-gray-900">
                                     <div class="flex items-center space-x-3">
                                         <div class="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-xs uppercase">
-                                            {{ substr($user->name, 0, 2) }}
+                                            {{ substr(__($user->name), 0, 2) }}
                                         </div>
-                                        <span>{{ $user->name }}</span>
+                                        <span>{{ __($user->name) }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-gray-600 text-xs font-mono">

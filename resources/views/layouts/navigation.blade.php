@@ -82,11 +82,11 @@
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-600 bg-white hover:text-gray-900 focus:outline-none transition">
                                 <div class="flex items-center space-x-2">
                                     <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs uppercase">
-                                        {{ substr(Auth::user()->name, 0, 2) }}
+                                        {{ substr(__(Auth::user()->name), 0, 2) }}
                                     </span>
-                                    <span>{{ Auth::user()->name }}</span>
+                                    <span>{{ __(Auth::user()->name) }}</span>
                                     <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-200">
-                                        {{ Auth::user()->role?->name ?? 'user' }}
+                                        {{ __(Auth::user()->role?->name ?? 'registered') }}
                                     </span>
                                 </div>
 
@@ -201,8 +201,8 @@
         <div class="pt-4 pb-3 border-t border-gray-200">
             @auth
                 <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }} ({{ Auth::user()->role?->name }})</div>
+                    <div class="font-medium text-base text-gray-800">{{ __(Auth::user()->name) }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }} ({{ __(Auth::user()->role?->name ?? 'registered') }})</div>
                 </div>
 
                 <div class="mt-3 space-y-1">
