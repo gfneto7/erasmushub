@@ -99,7 +99,7 @@
                                 <span class="text-2xl">🌤️</span>
                                 <div>
                                     <h3 class="font-bold text-gray-900 text-sm">{{ __('Local Weather') }}</h3>
-                                    <p class="text-xs text-gray-500">{{ $guide->city }}</p>
+                                    <p class="text-xs text-gray-500">{{ __($guide->city) }}</p>
                                 </div>
                             </div>
                             <span class="text-xs px-2 py-0.5 rounded bg-sky-50 text-sky-700 font-semibold border border-sky-200">
@@ -115,7 +115,7 @@
                                         <div class="text-3xl font-extrabold text-indigo-700">
                                             {{ $weather['temperature'] }}{{ $weather['temperature_unit'] }}
                                         </div>
-                                        <div class="text-xs font-medium text-gray-600">{{ $weather['description'] }}</div>
+                                        <div class="text-xs font-medium text-gray-600">{{ __($weather['description']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="bg-gray-50 rounded-xl p-2.5">
                                     <span class="text-gray-400 block">{{ __('Conditions') }}:</span>
-                                    <span class="font-bold text-gray-800">{{ $weather['description'] }}</span>
+                                    <span class="font-bold text-gray-800">{{ __($weather['description']) }}</span>
                                 </div>
                             </div>
 
@@ -156,7 +156,7 @@
                 @if ($relatedGuides->isNotEmpty())
                     <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
                         <h3 class="font-bold text-gray-900 text-sm mb-4 pb-2 border-b border-gray-100">
-                            {{ __('More in') }} {{ $guide->category->name }}
+                            {{ __('More in') }} {{ __($guide->category->name) }}
                         </h3>
 
                         <div class="space-y-4">

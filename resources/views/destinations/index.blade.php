@@ -23,10 +23,10 @@
                         <select id="city-select" name="city" onchange="this.form.submit()"
                             class="w-full bg-white text-gray-900 text-sm font-semibold rounded-xl border-0 shadow-lg focus:ring-2 focus:ring-indigo-400 py-2.5 px-3 cursor-pointer">
                             @foreach ($countries as $country)
-                                <optgroup label="{{ $country->flag_emoji }} {{ $country->name }}">
+                                <optgroup label="{{ $country->flag_emoji }} {{ __($country->name) }}">
                                     @foreach ($country->cities as $c)
                                         <option value="{{ $c->slug }}" {{ $currentCity && $currentCity->id === $c->id ? 'selected' : '' }}>
-                                            {{ $c->name }} ({{ $country->name }})
+                                            {{ __($c->name) }} ({{ __($country->name) }})
                                         </option>
                                     @endforeach
                                 </optgroup>
@@ -60,15 +60,15 @@
                         @endphp
                         @if (file_exists(public_path($cityImgPath)))
                             <div class="h-44 w-full rounded-2xl overflow-hidden mb-4 shadow-sm border border-gray-100">
-                                <img src="{{ asset($cityImgPath) }}" alt="{{ $currentCity->name }}" class="w-full h-full object-cover">
+                                <img src="{{ asset($cityImgPath) }}" alt="{{ __($currentCity->name) }}" class="w-full h-full object-cover">
                             </div>
                         @endif
 
                         <h2 class="text-3xl font-extrabold text-gray-900">
-                            {{ $currentCity->name }}
+                            {{ __($currentCity->name) }}
                         </h2>
                         <p class="text-sm font-medium text-indigo-600 mt-1">
-                            {{ $currentCity->country->name }} ({{ $currentCity->country->currency }})
+                            {{ __($currentCity->country->name) }} ({{ $currentCity->country->currency }})
                         </p>
 
                         <div class="mt-5 space-y-3">
@@ -77,7 +77,7 @@
                                     🎓 {{ __('Host University') }}
                                 </span>
                                 <span class="text-sm font-bold text-gray-900 mt-0.5 block">
-                                    {{ $currentCity->main_university ?? __('Multiple partner universities') }}
+                                    {{ __($currentCity->main_university ?? 'Multiple partner universities') }}
                                 </span>
                             </div>
 
@@ -92,7 +92,7 @@
                         </div>
 
                         <p class="text-sm text-gray-600 mt-4 leading-relaxed">
-                            {{ $currentCity->description }}
+                            {{ __($currentCity->description) }}
                         </p>
                     </div>
 
@@ -114,7 +114,7 @@
                                     {{ __('Live Weather Integration') }} (Open-Meteo API)
                                 </span>
                                 <h3 class="text-xl sm:text-2xl font-bold mt-0.5 flex items-center gap-2">
-                                    <span>{{ $currentCity->name }}</span>
+                                    <span>{{ __($currentCity->name) }}</span>
                                     <span class="text-base font-normal text-indigo-200">· {{ __('Forecast') }}</span>
                                 </h3>
                             </div>
@@ -162,7 +162,7 @@
                         <!-- 7-Day Forecast Row -->
                         <div class="mt-4 pt-6 border-t border-indigo-500/40">
                             <h4 class="text-xs uppercase tracking-wider font-bold text-indigo-200 mb-4">
-                                📅 {{ __('7-Day Forecast for Students Traveling to') }} {{ $currentCity->name }}
+                                📅 {{ __('7-Day Forecast for Students Traveling to') }} {{ __($currentCity->name) }}
                             </h4>
 
                             @if (!empty($weather['forecast']))
@@ -210,7 +210,7 @@
                             📚 {{ __('Student Knowledge Base') }}
                         </span>
                         <h3 class="text-2xl font-bold text-gray-900 mt-1">
-                            {{ __('Guides & Tips for') }} {{ $currentCity->name }}
+                            {{ __('Guides & Tips for') }} {{ __($currentCity->name) }}
                         </h3>
                     </div>
 
@@ -226,12 +226,12 @@
                             {{ __('No guides published specifically for this city yet.') }}
                         </p>
                         <p class="text-xs text-gray-500 mt-1">
-                            {{ __('Have you studied in') }} {{ $currentCity->name }}? {{ __('Share your experience with future Erasmus students!') }}
+                            {{ __('Have you studied in') }} {{ __($currentCity->name) }}? {{ __('Share your experience with future Erasmus students!') }}
                         </p>
                         @auth
                             @if(Auth::user()->canManageGuides())
                                 <a href="{{ route('admin.guides.create') }}" class="mt-4 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-sm transition">
-                                    + {{ __('Write a Guide for') }} {{ $currentCity->name }}
+                                    + {{ __('Write a Guide for') }} {{ __($currentCity->name) }}
                                 </a>
                             @endif
                         @endauth
@@ -243,7 +243,7 @@
                                 <div>
                                     <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
                                         <span class="px-2 py-0.5 rounded-lg bg-indigo-100 text-indigo-800 font-semibold">
-                                            {{ $guide->category->name }}
+                                            {{ __($guide->category->name) }}
                                         </span>
                                         <span>{{ $guide->created_at->format('d/m/Y') }}</span>
                                     </div>
@@ -290,7 +290,7 @@
                         <div class="flex items-center space-x-3 mb-4">
                             <span class="text-3xl">{{ $country->flag_emoji }}</span>
                             <div>
-                                <h4 class="font-bold text-gray-900 text-base">{{ $country->name }}</h4>
+                                <h4 class="font-bold text-gray-900 text-base">{{ __($country->name) }}</h4>
                                 <span class="text-xs text-gray-400">{{ count($country->cities) }} {{ __('cities') }} · {{ $country->currency }}</span>
                             </div>
                         </div>
@@ -300,7 +300,7 @@
                                 <a href="{{ route('destinations.index', ['city' => $c->slug]) }}"
                                     class="px-3 py-1.5 rounded-xl text-xs font-semibold transition
                                     {{ $currentCity && $currentCity->id === $c->id ? 'bg-indigo-600 text-white shadow-sm' : 'bg-gray-100 hover:bg-indigo-50 text-gray-700 hover:text-indigo-700 border border-gray-200' }}">
-                                    {{ $c->name }}
+                                    {{ __($c->name) }}
                                 </a>
                             @endforeach
                         </div>

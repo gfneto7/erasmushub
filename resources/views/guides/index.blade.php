@@ -51,7 +51,7 @@
                         <option value="">{{ __('Filter by City') }}</option>
                         @foreach ($cities as $c)
                             <option value="{{ $c }}" {{ $city === $c ? 'selected' : '' }}>
-                                {{ $c }}
+                                {{ __($c) }}
                             </option>
                         @endforeach
                     </select>

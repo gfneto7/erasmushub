@@ -33,7 +33,7 @@
                         @foreach ($categories as $cat)
                             <tr class="hover:bg-gray-50/80 transition">
                                 <td class="px-6 py-4 font-bold text-gray-900">
-                                    {{ $cat->name }}
+                                    {{ __($cat->name) }}
                                 </td>
                                 <td class="px-6 py-4 font-mono text-xs text-gray-500">
                                     {{ $cat->slug }}

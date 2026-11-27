@@ -83,7 +83,7 @@
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl">{{ $weather['icon'] ?? '⛅' }}</span>
                             <div>
-                                <h4 class="font-bold text-gray-900 text-base group-hover:text-indigo-600 transition">{{ $cityName }}</h4>
+                                <h4 class="font-bold text-gray-900 text-base group-hover:text-indigo-600 transition">{{ __($cityName) }}</h4>
                                 <p class="text-xs text-gray-500">{{ __($weather['description'] ?? 'Sunny') }}</p>
                             </div>
                         </div>

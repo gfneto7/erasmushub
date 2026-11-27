@@ -86,15 +86,15 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if ($user->isAdmin())
                                         <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-100 text-purple-800 border border-purple-200">
-                                            👑 Administrator
+                                            👑 {{ __('Administrator') }}
                                         </span>
                                     @elseif ($user->isEditor())
                                         <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-sky-100 text-sky-800 border border-sky-200">
-                                            ✍️ Editor
+                                            ✍️ {{ __('Editor') }}
                                         </span>
                                     @else
                                         <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-gray-100 text-gray-700 border border-gray-200">
-                                            👤 Registered
+                                            👤 {{ __('Registered User') }}
                                         </span>
                                     @endif
                                 </td>
