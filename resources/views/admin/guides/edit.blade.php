@@ -60,7 +60,7 @@
                     <select name="category_id" id="category_id" required class="w-full text-sm rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
                         @foreach ($categories as $cat)
                             <option value="{{ $cat->id }}" {{ old('category_id', $guide->category_id) == $cat->id ? 'selected' : '' }}>
-                                {{ $cat->name }}
+                                {{ __($cat->name) }}
                             </option>
                         @endforeach
                     </select>

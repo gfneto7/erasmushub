@@ -250,12 +250,12 @@
 
                                     <h4 class="font-bold text-gray-900 text-base line-clamp-2 hover:text-indigo-600">
                                         <a href="{{ route('guides.show', $guide->slug) }}">
-                                            {{ $guide->title }}
+                                            {{ __($guide->title) }}
                                         </a>
                                     </h4>
 
                                     <p class="text-xs text-gray-600 mt-2 line-clamp-3 leading-relaxed">
-                                        {{ $guide->summary }}
+                                        {{ __($guide->summary) }}
                                     </p>
                                 </div>
 

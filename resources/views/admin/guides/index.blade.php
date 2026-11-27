@@ -40,7 +40,7 @@
                         <option value="">{{ __('All Categories') }}</option>
                         @foreach ($categories as $cat)
                             <option value="{{ $cat->id }}" {{ (string)$categoryId === (string)$cat->id ? 'selected' : '' }}>
-                                {{ $cat->name }}
+                                {{ __($cat->name) }}
                             </option>
                         @endforeach
                     </select>
@@ -86,20 +86,20 @@
                                     <td class="px-6 py-4">
                                         <div class="font-bold text-gray-900 line-clamp-1">
                                             <a href="{{ route('guides.show', $guide->slug) }}" target="_blank" class="hover:text-indigo-600 hover:underline">
-                                                {{ $guide->title }}
+                                                {{ __($guide->title) }}
                                             </a>
                                         </div>
                                         <div class="text-xs text-gray-500 line-clamp-1 mt-0.5">
-                                            {{ $guide->summary }}
+                                            {{ __($guide->summary) }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-gray-100 text-gray-700">
-                                            {{ $guide->category->name }}
+                                            {{ __($guide->category->name) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-gray-600 text-xs">
-                                        {{ $guide->city ?? '—' }}
+                                        {{ $guide->city ? __($guide->city) : '—' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-600">
                                         {{ $guide->author->name }}

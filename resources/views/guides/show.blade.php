@@ -6,7 +6,7 @@
                 <span>/</span>
                 <a href="{{ route('guides.index') }}" class="hover:text-indigo-600">{{ __('Guides') }}</a>
                 <span>/</span>
-                <span class="text-gray-900 font-medium truncate max-w-xs">{{ $guide->title }}</span>
+                <span class="text-gray-900 font-medium truncate max-w-xs">{{ __($guide->title) }}</span>
             </nav>
 
             @can('update', $guide)
@@ -41,7 +41,7 @@
 
                     <!-- Title -->
                     <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                        {{ $guide->title }}
+                        {{ __($guide->title) }}
                     </h1>
 
                     <!-- Author & Published Date -->
@@ -58,12 +58,12 @@
 
                     <!-- Summary Highlight Callout -->
                     <div class="my-6 p-4 rounded-2xl bg-indigo-50/60 border-l-4 border-indigo-500 text-indigo-950 font-medium text-base leading-relaxed">
-                        {{ $guide->summary }}
+                        {{ __($guide->summary) }}
                     </div>
 
                     <!-- Complementary Image -->
                     <div class="my-8 rounded-2xl overflow-hidden shadow-md border border-gray-200">
-                        <img src="{{ $guide->image_full_url }}" alt="{{ $guide->image?->alt_text ?? $guide->title }}" class="w-full h-auto max-h-[500px] object-cover">
+                        <img src="{{ $guide->image_full_url }}" alt="{{ $guide->image?->alt_text ?? __($guide->title) }}" class="w-full h-auto max-h-[500px] object-cover">
                         @if ($guide->image?->alt_text)
                             <p class="text-xs text-center text-gray-400 py-2 bg-gray-50 italic border-t border-gray-100">
                                 {{ $guide->image->alt_text }}
@@ -77,7 +77,7 @@
 
                     <!-- Guide Content (Rich text, sanitized) -->
                     <div class="prose max-w-none text-gray-800 leading-relaxed text-base">
-                        {!! $guide->content !!}
+                        {!! __($guide->content) !!}
                     </div>
 
                     <!-- Back Button -->

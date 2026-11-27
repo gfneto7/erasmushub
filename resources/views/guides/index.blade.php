@@ -38,7 +38,7 @@
                         <option value="">{{ __('All Categories') }}</option>
                         @foreach ($categories as $cat)
                             <option value="{{ $cat->slug }}" {{ $categorySlug === $cat->slug ? 'selected' : '' }}>
-                                {{ $cat->name }} ({{ $cat->guides_count }})
+                                {{ __($cat->name) }} ({{ $cat->guides_count }})
                             </option>
                         @endforeach
                     </select>
@@ -113,11 +113,11 @@
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-900 hover:text-indigo-600 transition line-clamp-2">
                                         <a href="{{ route('guides.show', $guide->slug) }}">
-                                            {{ $guide->title }}
+                                            {{ __($guide->title) }}
                                         </a>
                                     </h3>
                                     <p class="mt-2 text-sm text-gray-600 line-clamp-3 leading-relaxed">
-                                        {{ $guide->summary }}
+                                        {{ __($guide->summary) }}
                                     </p>
                                 </div>
 

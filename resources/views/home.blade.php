@@ -170,11 +170,11 @@
                             <div>
                                 <h3 class="text-lg font-bold text-gray-900 hover:text-indigo-600 transition line-clamp-2">
                                     <a href="{{ route('guides.show', $guide->slug) }}">
-                                        {{ $guide->title }}
+                                        {{ __($guide->title) }}
                                     </a>
                                 </h3>
                                 <p class="mt-2 text-sm text-gray-600 line-clamp-3 leading-relaxed">
-                                    {{ $guide->summary }}
+                                    {{ __($guide->summary) }}
                                 </p>
                             </div>
 
