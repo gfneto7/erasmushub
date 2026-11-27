@@ -102,7 +102,7 @@
                                         {{ $guide->city ? __($guide->city) : '—' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-600">
-                                        {{ __($guide->author->name) }}
+                                        {{ $guide->author->name }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if ($guide->status === 'published')

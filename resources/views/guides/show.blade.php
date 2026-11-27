@@ -47,10 +47,10 @@
                     <!-- Author & Published Date -->
                     <div class="mt-4 pb-6 border-b border-gray-100 flex items-center space-x-3 text-sm text-gray-500">
                         <div class="h-9 w-9 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-xs uppercase">
-                            {{ substr(__($guide->author->name), 0, 2) }}
+                            {{ substr($guide->author->name, 0, 2) }}
                         </div>
                         <div>
-                            <span class="font-semibold text-gray-800">{{ __($guide->author->name) }}</span>
+                            <span class="font-semibold text-gray-800">{{ $guide->author->name }}</span>
                             <span class="mx-1">•</span>
                             <span>{{ $guide->published_at ? $guide->published_at->format('d M Y, H:i') : __('Draft') }}</span>
                         </div>
