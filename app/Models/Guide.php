@@ -76,4 +76,19 @@ class Guide extends Model
     {
         return $query->where('status', 'published');
     }
+
+    /**
+     * Auto-traduz o título e resumo do guia para as restantes línguas
+     * sempre que um novo guia é criado ou atualizado.
+     */
+    protected static function booted(): void
+    {
+        static::saved(function (Guide $guide) {
+            try {
+                \App\Services\AutoTranslationService::translateGuide($guide);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning("AutoTranslation on Guide saved: {$e->getMessage()}");
+            }
+        });
+    }
 }
