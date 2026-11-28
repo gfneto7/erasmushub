@@ -65,14 +65,15 @@ class GuideController extends Controller
     public function show(string $slug, WeatherService $weatherService): View
     {
         $guide = Guide::where('slug', $slug)
-            ->with(['category', 'author', 'image'])
+            ->with(['category', 'author', 'image', 'destinationCity'])
             ->firstOrFail();
 
         // Check view authorization (drafts can only be seen by author or admin)
         Gate::authorize('view', $guide);
 
         // Fetch live weather from external API for this guide's city
-        $weather = $guide->city ? $weatherService->getWeatherForCity($guide->city) : null;
+        $cityName = $guide->destinationCity?->name ?? $guide->city;
+        $weather = $cityName ? $weatherService->getWeatherForCity($cityName) : null;
 
         $relatedGuides = Guide::query()
             ->published()

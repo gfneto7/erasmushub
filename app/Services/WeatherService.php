@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class WeatherService
 {
@@ -66,18 +67,22 @@ class WeatherService
     /**
      * Resolve latitude and longitude for a given city string or City model.
      */
-    protected function resolveCoordinates(string $city): array
+    protected function resolveCoordinates(string $city): ?array
     {
         $normalizedCity = strtolower(trim($city));
+        $citySlug = Str::slug($city);
 
         // 1. Try static map
         if (isset($this->cityCoordinates[$normalizedCity])) {
             return $this->cityCoordinates[$normalizedCity];
         }
+        if (isset($this->cityCoordinates[$citySlug])) {
+            return $this->cityCoordinates[$citySlug];
+        }
 
         // 2. Try database
-        $dbCity = City::where('name', 'like', "%{$city}%")
-            ->orWhere('slug', 'like', "%{$normalizedCity}%")
+        $dbCity = City::where('slug', $citySlug)
+            ->orWhere('name', 'like', "%{$city}%")
             ->first();
 
         if ($dbCity) {
@@ -88,8 +93,8 @@ class WeatherService
             ];
         }
 
-        // Default fallback to Lisbon
-        return $this->cityCoordinates['lisboa'];
+        // Return null if city coordinates cannot be verified
+        return null;
     }
 
     /**
@@ -102,10 +107,13 @@ class WeatherService
             return null;
         }
 
-        $normalizedCity = strtolower(trim($city));
-        $cacheKey = 'weather_city_extended_' . $normalizedCity;
-
         $coords = $this->resolveCoordinates($city);
+        if (! $coords) {
+            return null;
+        }
+
+        $normalizedCity = strtolower(trim($coords['name']));
+        $cacheKey = 'weather_city_extended_' . $normalizedCity;
 
         // Check cache first
         if (Cache::has($cacheKey)) {

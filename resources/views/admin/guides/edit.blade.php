@@ -71,11 +71,18 @@
 
                 <!-- City -->
                 <div>
-                    <label for="city" class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                        {{ __('City') }} ({{ __('Erasmus Destination') }})
+                    <label for="city_id" class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
+                        {{ __('City') }} ({{ __('Erasmus Destination') }}) <span class="text-rose-500">*</span>
                     </label>
-                    <input type="text" name="city" id="city" value="{{ old('city', $guide->city) }}" class="w-full text-sm rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
-                    @error('city')
+                    <select name="city_id" id="city_id" required class="w-full text-sm rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+                        <option value="">-- {{ __('Select a Destination City') }} --</option>
+                        @foreach ($cities as $c)
+                            <option value="{{ $c->id }}" {{ old('city_id', $guide->city_id ?? $guide->destinationCity?->id) == $c->id || (empty(old('city_id')) && $guide->city === $c->name) ? 'selected' : '' }}>
+                                {{ __($c->name) }} ({{ __($c->country->name) }})
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('city_id')
                         <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
                     @enderror
                 </div>

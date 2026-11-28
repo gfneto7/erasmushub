@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Guide;
 use App\Models\Image;
 use Illuminate\Http\RedirectResponse;
@@ -67,8 +68,9 @@ class GuideController extends Controller
         Gate::authorize('create', Guide::class);
 
         $categories = Category::all();
+        $cities = City::with('country')->orderBy('name')->get();
 
-        return view('admin.guides.create', compact('categories'));
+        return view('admin.guides.create', compact('categories', 'cities'));
     }
 
     /**
@@ -83,11 +85,13 @@ class GuideController extends Controller
             'summary' => ['required', 'string', 'max:500'],
             'content' => ['required', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
-            'city' => ['nullable', 'string', 'max:100'],
+            'city_id' => ['nullable', 'exists:cities,id'],
             'status' => ['required', 'in:draft,published'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'alt_text' => ['nullable', 'string', 'max:255'],
         ]);
+
+        $selectedCity = !empty($validated['city_id']) ? City::find($validated['city_id']) : null;
 
         // Clean & sanitize HTML content (protecting against XSS)
         $cleanContent = strip_tags($validated['content'], '<p><br><strong><em><b><i><u><h2><h3><h4><ul><ol><li><a><blockquote>');
@@ -102,7 +106,7 @@ class GuideController extends Controller
         }
 
         // Use database transaction as required when creating multiple related records (Guide + Image)
-        DB::transaction(function () use ($validated, $slug, $cleanContent, $request) {
+        DB::transaction(function () use ($validated, $slug, $cleanContent, $request, $selectedCity) {
             $guide = Guide::forceCreate([
                 'title' => $validated['title'],
                 'slug' => $slug,
@@ -110,7 +114,8 @@ class GuideController extends Controller
                 'content' => $cleanContent,
                 'category_id' => $validated['category_id'],
                 'author_id' => Auth::id(),
-                'city' => $validated['city'] ?? null,
+                'city_id' => $selectedCity?->id,
+                'city' => $selectedCity?->name,
                 'status' => $validated['status'],
                 'published_at' => $validated['status'] === 'published' ? now() : null,
             ]);
@@ -151,8 +156,9 @@ class GuideController extends Controller
         Gate::authorize('update', $guide);
 
         $categories = Category::all();
+        $cities = City::with('country')->orderBy('name')->get();
 
-        return view('admin.guides.edit', compact('guide', 'categories'));
+        return view('admin.guides.edit', compact('guide', 'categories', 'cities'));
     }
 
     /**
@@ -167,16 +173,17 @@ class GuideController extends Controller
             'summary' => ['required', 'string', 'max:500'],
             'content' => ['required', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
-            'city' => ['nullable', 'string', 'max:100'],
+            'city_id' => ['nullable', 'exists:cities,id'],
             'status' => ['required', 'in:draft,published'],
             'remove_image' => ['nullable', 'boolean'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'alt_text' => ['nullable', 'string', 'max:255'],
         ]);
 
+        $selectedCity = !empty($validated['city_id']) ? City::find($validated['city_id']) : null;
         $cleanContent = strip_tags($validated['content'], '<p><br><strong><em><b><i><u><h2><h3><h4><ul><ol><li><a><blockquote>');
 
-        DB::transaction(function () use ($validated, $guide, $cleanContent, $request) {
+        DB::transaction(function () use ($validated, $guide, $cleanContent, $request, $selectedCity) {
             // Check if status changed to published for the first time
             $publishedAt = $guide->published_at;
             if ($validated['status'] === 'published' && ! $publishedAt) {
@@ -190,7 +197,8 @@ class GuideController extends Controller
                 'summary' => $validated['summary'],
                 'content' => $cleanContent,
                 'category_id' => $validated['category_id'],
-                'city' => $validated['city'] ?? null,
+                'city_id' => $selectedCity?->id,
+                'city' => $selectedCity?->name,
                 'status' => $validated['status'],
                 'published_at' => $publishedAt,
             ]);
