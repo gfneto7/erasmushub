@@ -61,8 +61,18 @@ class Guide extends Model
             return asset('storage/' . $this->image->path);
         }
 
-        if ($this->city) {
-            $citySlug = \Illuminate\Support\Str::slug($this->city);
+        $cityName = $this->destinationCity?->name ?? $this->city;
+        if (! $cityName && $this->title) {
+            foreach (['lisboa', 'porto', 'coimbra', 'braga', 'madrid', 'barcelona', 'valencia', 'paris', 'lyon', 'roma', 'bolonha', 'berlim', 'munique', 'zagreb', 'split', 'dubrovnik', 'praga'] as $c) {
+                if (\Illuminate\Support\Str::contains(strtolower($this->title), $c)) {
+                    $cityName = ucfirst($c);
+                    break;
+                }
+            }
+        }
+
+        if ($cityName) {
+            $citySlug = \Illuminate\Support\Str::slug($cityName);
             if (file_exists(public_path("images/cities/{$citySlug}.jpg"))) {
                 return asset("images/cities/{$citySlug}.jpg");
             }

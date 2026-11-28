@@ -92,6 +92,14 @@ class GuideController extends Controller
         ]);
 
         $selectedCity = !empty($validated['city_id']) ? City::find($validated['city_id']) : null;
+        if (! $selectedCity && !empty($validated['title'])) {
+            foreach (['Lisboa', 'Porto', 'Coimbra', 'Braga', 'Madrid', 'Barcelona', 'Valencia', 'Paris', 'Lyon', 'Roma', 'Bolonha', 'Berlim', 'Munique', 'Zagreb', 'Split', 'Dubrovnik', 'Praga'] as $c) {
+                if (Str::contains(strtolower($validated['title']), strtolower($c))) {
+                    $selectedCity = City::where('name', $c)->first();
+                    break;
+                }
+            }
+        }
 
         // Clean & sanitize HTML content (protecting against XSS)
         $cleanContent = strip_tags($validated['content'], '<p><br><strong><em><b><i><u><h2><h3><h4><ul><ol><li><a><blockquote>');
@@ -181,6 +189,14 @@ class GuideController extends Controller
         ]);
 
         $selectedCity = !empty($validated['city_id']) ? City::find($validated['city_id']) : null;
+        if (! $selectedCity && !empty($validated['title'])) {
+            foreach (['Lisboa', 'Porto', 'Coimbra', 'Braga', 'Madrid', 'Barcelona', 'Valencia', 'Paris', 'Lyon', 'Roma', 'Bolonha', 'Berlim', 'Munique', 'Zagreb', 'Split', 'Dubrovnik', 'Praga'] as $c) {
+                if (Str::contains(strtolower($validated['title']), strtolower($c))) {
+                    $selectedCity = City::where('name', $c)->first();
+                    break;
+                }
+            }
+        }
         $cleanContent = strip_tags($validated['content'], '<p><br><strong><em><b><i><u><h2><h3><h4><ul><ol><li><a><blockquote>');
 
         DB::transaction(function () use ($validated, $guide, $cleanContent, $request, $selectedCity) {

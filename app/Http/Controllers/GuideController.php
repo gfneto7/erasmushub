@@ -73,6 +73,14 @@ class GuideController extends Controller
 
         // Fetch live weather from external API for this guide's city
         $cityName = $guide->destinationCity?->name ?? $guide->city;
+        if (! $cityName && $guide->title) {
+            foreach (['lisboa', 'porto', 'coimbra', 'braga', 'madrid', 'barcelona', 'valencia', 'paris', 'lyon', 'roma', 'bolonha', 'berlim', 'munique', 'zagreb', 'split', 'dubrovnik', 'praga'] as $c) {
+                if (\Illuminate\Support\Str::contains(strtolower($guide->title), $c)) {
+                    $cityName = ucfirst($c);
+                    break;
+                }
+            }
+        }
         $weather = $cityName ? $weatherService->getWeatherForCity($cityName) : null;
 
         $relatedGuides = Guide::query()

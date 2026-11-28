@@ -23,13 +23,24 @@
             <div class="lg:col-span-2 space-y-8">
                 <article class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-200">
                     <!-- Badges & Metadata -->
+                    @php
+                        $displayCity = $guide->destinationCity?->name ?? $guide->city;
+                        if (! $displayCity && $guide->title) {
+                            foreach (['lisboa', 'porto', 'coimbra', 'braga', 'madrid', 'barcelona', 'valencia', 'paris', 'lyon', 'roma', 'bolonha', 'berlim', 'munique', 'zagreb', 'split', 'dubrovnik', 'praga'] as $c) {
+                                if (\Illuminate\Support\Str::contains(strtolower($guide->title), $c)) {
+                                    $displayCity = ucfirst($c);
+                                    break;
+                                }
+                            }
+                        }
+                    @endphp
                     <div class="flex flex-wrap items-center gap-2 mb-4">
                         <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100">
                             {{ __($guide->category->name) }}
                         </span>
-                        @if ($guide->city)
+                        @if ($displayCity)
                             <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-gray-100 text-gray-700 border border-gray-200">
-                                📍 {{ __($guide->city) }}
+                                📍 {{ __($displayCity) }}
                             </span>
                         @endif
                         @if ($guide->status === 'draft')
@@ -68,9 +79,9 @@
                             <p class="text-xs text-center text-gray-400 py-2 bg-gray-50 italic border-t border-gray-100">
                                 {{ $guide->image->alt_text }}
                             </p>
-                        @elseif ($guide->city)
+                        @elseif ($displayCity)
                             <p class="text-xs text-center text-gray-400 py-2 bg-gray-50 italic border-t border-gray-100">
-                                📍 {{ __($guide->city) }}
+                                📍 {{ __($displayCity) }}
                             </p>
                         @endif
                     </div>
@@ -99,7 +110,7 @@
                                 <span class="text-2xl">🌤️</span>
                                 <div>
                                     <h3 class="font-bold text-gray-900 text-sm">{{ __('Local Weather') }}</h3>
-                                    <p class="text-xs text-gray-500">{{ __($guide->city) }}</p>
+                                    <p class="text-xs text-gray-500">{{ __($displayCity) }}</p>
                                 </div>
                             </div>
                             <span class="text-xs px-2 py-0.5 rounded bg-sky-50 text-sky-700 font-semibold border border-sky-200">
@@ -163,7 +174,7 @@
                             @foreach ($relatedGuides as $related)
                                 <div class="group">
                                     <a href="{{ route('guides.show', $related->slug) }}" class="block text-sm font-semibold text-gray-800 group-hover:text-indigo-600 transition line-clamp-2">
-                                        {{ $related->title }}
+                                        {{ __($related->title) }}
                                     </a>
                                     <span class="text-xs text-gray-400 mt-1 block">
                                         {{ $related->published_at?->format('d M Y') }}
