@@ -314,7 +314,7 @@ class ErasmusHubTest extends TestCase
         $response = $this->get('/destinations?city=zagreb');
         $response->assertStatus(200);
         $response->assertSee('Zagreb');
-        $response->assertSee('Croácia');
+        $response->assertSee(__('Croácia'));
     }
 
     /**
